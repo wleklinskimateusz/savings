@@ -1,6 +1,8 @@
 import { darken, lighten } from "polished";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
+import { addFund, fundsSelector } from "../redux/features/funds/fundsSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { colors } from "../theme/colors";
 
 type Inputs = {
@@ -14,7 +16,16 @@ export default function Form() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => alert(JSON.stringify(data));
+  const dispatch = useAppDispatch();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    dispatch(
+      addFund({
+        value: data.fund,
+        timestamp: new Date(data.date).getTime(),
+      })
+    );
+  };
 
   const getTodayString = () => {
     const today = new Date();
